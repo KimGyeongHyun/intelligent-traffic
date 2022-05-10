@@ -23,7 +23,8 @@
 //pinout
 #define SONAR_TRIG_PIN PA0
 #define SONAR_ECHO_PIN INT1
-
+#define PEOPLE_COUNT_PIN INT2
+#define CAR_COUNT_PIN INT3
 
 //lib
 #include <avr/io.h>
@@ -53,6 +54,9 @@ unsigned long overspeedDisplayStart = 0;
 
 //LCD
 #define OVERSPEED_LIMIT 75
+
+//count
+int peopleCount = 0, carCount = 0;
 
 //UART----------------------
 
@@ -213,6 +217,42 @@ void Traffic_Light_Cycle(){	// 자동차 기준 신호등
 	else	PORTF = GREEN_LED;
 }
 
+// count car and people
+Counter_Init()
+{
+	// falling edge
+	// use INT2, INT3
+	EICRA &= ~(1 << ISC20);
+	EICRA = 1 << ISC21;
+	EICRA &= ~(1 << ISC30);
+	EICRA = 1 << ISC31;
+	
+	// interrupt enable
+	EIMSK |= (1 << PEOPLE_COUNT_PIN) | (1 << CAR_COUNT_PIN);
+}
+
+// count people
+ISR(INT2_vect){
+	peopleCount++;
+}
+
+// count car
+ISR(INT3_vect){
+	carCount++;
+}
+
+
+// 사람과 자동차 count 보여주는 함수
+void Print_Falling_Edge(){
+	USART_TX_String("People count : ");
+	itoa(peopleCount, buffer, 10);
+	USART_TX_String(buffer);
+	USART_TX_String("\r\n");
+	USART_TX_String("Car count : ");
+	itoa(carCount, buffer, 10);
+	USART_TX_String(buffer);
+	USART_TX_String("\r\n");
+}
 
 int main(void)
 {
@@ -254,5 +294,6 @@ int main(void)
 		// millis() 에 따라 led 점멸
 		// use portF
 		Traffic_Light_Cycle();
+		Print_Falling_Edge();
 	}
 }
