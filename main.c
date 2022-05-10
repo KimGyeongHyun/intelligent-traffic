@@ -251,7 +251,7 @@ void Print_Falling_Edge(){
 	USART_TX_String("Car count : ");
 	itoa(carCount, buffer, 10);
 	USART_TX_String(buffer);
-	USART_TX_String("\r\n");
+	USART_TX_String("\r\n\r\n");
 }
 
 int main(void)
@@ -260,6 +260,7 @@ int main(void)
 	USART_Init(MYUBRR);
 	init_millis(F_CPU);
 	Sonar_Init();
+	Counter_Init();
 	
 	sei();//golbal interrrupt enable
 
