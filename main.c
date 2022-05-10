@@ -294,6 +294,7 @@ int main(void)
 		// millis() 에 따라 led 점멸
 		// use portF
 		Traffic_Light_Cycle();
+		// 임시로 2,3번 인터럽트 falling edge 횟수를 usart tx 출력하는 함수
 		Print_Falling_Edge();
 	}
 }
