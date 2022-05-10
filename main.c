@@ -251,7 +251,7 @@ void Print_Falling_Edge(){
 	USART_TX_String("Car count : ");
 	itoa(carCount, buffer, 10);
 	USART_TX_String(buffer);
-	USART_TX_String("\r\n");
+	USART_TX_String("\r\n\r\n");
 }
 
 int main(void)
@@ -260,6 +260,7 @@ int main(void)
 	USART_Init(MYUBRR);
 	init_millis(F_CPU);
 	Sonar_Init();
+	Counter_Init();
 	
 	sei();//golbal interrrupt enable
 
@@ -275,8 +276,8 @@ int main(void)
 		
 		// LCD를 통합한 코드
 		//속도를 읽어와 인쇄
-		int spd = Sonar_Get_Speed();//Sonar_Get_Tof()함수 수행시간 약 500us ~ 3ms로 측정됨
-		Speed_LCD_Alert(spd);
+		//int spd = Sonar_Get_Speed();//Sonar_Get_Tof()함수 수행시간 약 500us ~ 3ms로 측정됨
+		//Speed_LCD_Alert(spd);
 		
 		// USART
 		/*
